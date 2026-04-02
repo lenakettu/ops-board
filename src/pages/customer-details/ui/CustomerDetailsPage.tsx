@@ -1,0 +1,63 @@
+import { useQuery } from '@tanstack/react-query';
+import { Link, useParams } from 'react-router-dom';
+
+import { getCustomerById } from '@/entities/customer/api/customersApi';
+import styles from './CustomerDetailsPage.module.css';
+
+export function CustomerDetailsPage() {
+  const { customerId } = useParams<{ customerId: string }>();
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['customer', customerId],
+    queryFn: () => getCustomerById(customerId ?? ''),
+    enabled: customerId !== undefined,
+  });
+
+  if (isLoading) {
+    return <div className={styles.message}>Loading customer details...</div>;
+  }
+
+  if (isError || !data) {
+    return <div className={styles.message}>Customer not found.</div>;
+  }
+
+  return (
+    <section className={styles.page}>
+      <Link to="/customers" className={styles.backLink}>
+        ← Back to customers
+      </Link>
+
+      <div className={styles.card}>
+        <h2 className={styles.title}>{data.name}</h2>
+        <p className={styles.company}>{data.company}</p>
+
+        <dl className={styles.details}>
+          <div className={styles.row}>
+            <dt>Email</dt>
+            <dd>{data.email}</dd>
+          </div>
+
+          <div className={styles.row}>
+            <dt>Status</dt>
+            <dd>{data.status}</dd>
+          </div>
+
+          <div className={styles.row}>
+            <dt>Plan</dt>
+            <dd>{data.plan}</dd>
+          </div>
+
+          <div className={styles.row}>
+            <dt>MRR</dt>
+            <dd>${data.mrr}</dd>
+          </div>
+
+          <div className={styles.row}>
+            <dt>Created</dt>
+            <dd>{new Date(data.createdAt).toLocaleDateString()}</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+  );
+}

@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-standard-scss",
+    "stylelint-config-css-modules",
+    "stylelint-config-recess-order"
+  ],
+  "rules": {
+    "alpha-value-notation": "number",
+    "color-function-notation": "modern",
+    "declaration-block-no-redundant-longhand-properties": true,
+    "no-descending-specificity": null,
+    "property-no-vendor-prefix": true,
+    "value-no-vendor-prefix": true
+  }
+}

@@ -1,0 +1,56 @@
+.page {
+  display: grid;
+  gap: 16px;
+}
+
+.backLink {
+  width: fit-content;
+  color: var(--primary);
+}
+
+.card {
+  max-width: 720px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.title {
+  font-size: 24px;
+}
+
+.company {
+  margin-top: 6px;
+  color: var(--text-secondary);
+}
+
+.details {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.row dt {
+  color: var(--text-secondary);
+}
+
+.message {
+  color: var(--text-secondary);
+}
+
+@media (width <= 640px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
