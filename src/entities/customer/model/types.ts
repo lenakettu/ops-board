@@ -17,8 +17,8 @@ export type SortDirection = 'asc' | 'desc';
 
 export interface CustomersFilters {
   search: string;
-  status: CustomerStatus | 'all';
-  plan: CustomerPlan | 'all';
+  status: CustomerStatus[];
+  plan: CustomerPlan[];
   page: number;
   pageSize: number;
   sortBy: CustomerSortField;

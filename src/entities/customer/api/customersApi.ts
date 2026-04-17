@@ -77,8 +77,9 @@ function filterCustomers(items: Customer[], filters: CustomersFilters): Customer
       customer.email.toLowerCase().includes(search) ||
       customer.company.toLowerCase().includes(search);
 
-    const matchesStatus = filters.status === 'all' || customer.status === filters.status;
-    const matchesPlan = filters.plan === 'all' || customer.plan === filters.plan;
+    const matchesStatus = filters.status.length === 0 || filters.status.includes(customer.status);
+
+    const matchesPlan = filters.plan.length === 0 || filters.plan.includes(customer.plan);
 
     return matchesSearch && matchesStatus && matchesPlan;
   });

@@ -6,8 +6,8 @@ import type {
 
 export const defaultCustomersFilters: CustomersFilters = {
   search: '',
-  status: 'all',
-  plan: 'all',
+  status: [],
+  plan: [],
   page: 1,
   pageSize: 10,
   sortBy: 'createdAt',
@@ -24,7 +24,7 @@ export function updateSearch(prev: CustomersFilters, search: string): CustomersF
 
 export function updateStatus(
   prev: CustomersFilters,
-  status: CustomerStatus | 'all',
+  status: CustomerStatus[],
 ): CustomersFilters {
   return {
     ...prev,
@@ -33,7 +33,7 @@ export function updateStatus(
   };
 }
 
-export function updatePlan(prev: CustomersFilters, plan: CustomerPlan | 'all'): CustomersFilters {
+export function updatePlan(prev: CustomersFilters, plan: CustomerPlan[]): CustomersFilters {
   return {
     ...prev,
     plan,
