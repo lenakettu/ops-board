@@ -1,27 +1,28 @@
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 import { getCustomers } from '@/entities/customer/api/customersApi';
-import type { CustomersFilters } from '@/entities/customer/model/types';
-import { defaultCustomersFilters } from '../model/constants';
+import { CustomerFilters } from '@/features/customer-filters/ui/CustomerFilters';
+import { CustomersPagination } from '@/widgets/customers-pagination/ui/CustomersPagination';
+import { CustomersTable } from '@/widgets/customers-table/ui/CustomersTable';
+
+import {
+  defaultCustomersFilters,
+  resetFilters,
+  updatePage,
+  updatePlan,
+  updateSearch,
+  updateStatus,
+} from '../model/tableState';
 import styles from './CustomersPage.module.css';
 
 export function CustomersPage() {
-  const [filters] = useState<CustomersFilters>(defaultCustomersFilters);
+  const [filters, setFilters] = useState(defaultCustomersFilters);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['customers', filters],
     queryFn: () => getCustomers(filters),
   });
-
-  if (isLoading) {
-    return <div className={styles.message}>Loading customers...</div>;
-  }
-
-  if (isError || !data) {
-    return <div className={styles.message}>Failed to load customers.</div>;
-  }
 
   return (
     <section className={styles.page}>
@@ -30,35 +31,35 @@ export function CustomersPage() {
           <h2 className={styles.title}>Customers</h2>
           <p className={styles.description}>Customer directory for account operations.</p>
         </div>
-
-        <div className={styles.meta}>
-          <span className={styles.metaItem}>Total: {data.total}</span>
-          <span className={styles.metaItem}>
-            Page {data.page} / {data.totalPages}
-          </span>
-        </div>
       </div>
 
-      <div className={styles.card}>
-        <ul className={styles.list}>
-          {data.items.map((customer) => (
-            <li key={customer.id} className={styles.item}>
-              <div className={styles.itemMain}>
-                <Link to={`/customers/${customer.id}`} className={styles.link}>
-                  {customer.name}
-                </Link>
-                <p className={styles.company}>{customer.company}</p>
-              </div>
+      <CustomerFilters
+        filters={filters}
+        onSearchChange={(value) => {
+          setFilters((prev) => updateSearch(prev, value));
+        }}
+        onStatusChange={(value) => {
+          setFilters((prev) => updateStatus(prev, value));
+        }}
+        onPlanChange={(value) => {
+          setFilters((prev) => updatePlan(prev, value));
+        }}
+        onReset={() => {
+          setFilters(resetFilters());
+        }}
+      />
 
-              <div className={styles.itemMeta}>
-                <span>{customer.email}</span>
-                <span>{customer.plan}</span>
-                <span>${customer.mrr}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <CustomersTable items={data?.items ?? []} isLoading={isLoading} isError={isError} />
+
+      {data ? (
+        <CustomersPagination
+          page={data.page}
+          totalPages={data.totalPages}
+          onPageChange={(page) => {
+            setFilters((prev) => updatePage(prev, page));
+          }}
+        />
+      ) : null}
     </section>
   );
 }

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { getOverviewStats } from '@/entities/customer/api/customersApi';
+
 import styles from './OverviewPage.module.css';
 
 export function OverviewPage() {

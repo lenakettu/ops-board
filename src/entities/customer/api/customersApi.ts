@@ -1,18 +1,18 @@
+import { fakeDelay } from '@/shared/api/fakeDelay';
+import { HttpError } from '@/shared/api/httpError';
 import {
   getCustomerFromDb,
   getCustomersDb,
   insertCustomerToDb,
   updateCustomerInDb,
 } from '@/shared/api/mockDb';
-import { HttpError } from '@/shared/api/httpError';
-import { fakeDelay } from '@/shared/api/fakeDelay';
+
 import type {
   CreateCustomerInput,
   Customer,
-  CustomerListItem,
-  CustomerSortField,
   CustomersFilters,
   CustomersListResponse,
+  CustomerSortField,
   OverviewStats,
   SortDirection,
   UpdateCustomerInput,
@@ -42,10 +42,10 @@ function compareDates(left: string, right: string, direction: SortDirection): nu
 }
 
 function sortCustomers(
-  items: CustomerListItem[],
+  items: Customer[],
   sortBy: CustomerSortField,
   sortDirection: SortDirection,
-): CustomerListItem[] {
+): Customer[] {
   const sorted = [...items];
 
   sorted.sort((left, right) => {
@@ -67,7 +67,7 @@ function sortCustomers(
   return sorted;
 }
 
-function filterCustomers(items: CustomerListItem[], filters: CustomersFilters): CustomerListItem[] {
+function filterCustomers(items: Customer[], filters: CustomersFilters): Customer[] {
   const search = normalizeSearch(filters.search);
 
   return items.filter((customer) => {
@@ -85,7 +85,7 @@ function filterCustomers(items: CustomerListItem[], filters: CustomersFilters): 
 }
 
 function paginateCustomers(
-  items: CustomerListItem[],
+  items: Customer[],
   page: number,
   pageSize: number,
 ): CustomersListResponse {

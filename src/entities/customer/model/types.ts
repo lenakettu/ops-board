@@ -12,8 +12,6 @@ export interface Customer {
   createdAt: string;
 }
 
-export interface CustomerListItem extends Customer {}
-
 export type CustomerSortField = 'name' | 'company' | 'createdAt' | 'mrr';
 export type SortDirection = 'asc' | 'desc';
 
@@ -28,7 +26,7 @@ export interface CustomersFilters {
 }
 
 export interface CustomersListResponse {
-  items: CustomerListItem[];
+  items: Customer[];
   total: number;
   page: number;
   pageSize: number;

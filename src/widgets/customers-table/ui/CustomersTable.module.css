@@ -1,0 +1,125 @@
+.wrapper {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.table {
+  width: 100%;
+  min-width: 960px;
+  font-size: 14px;
+  border-spacing: 0;
+  border-collapse: separate;
+}
+
+.headRow {
+  background: var(--surface-secondary);
+}
+
+.headCell {
+  padding: 14px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border);
+}
+
+.row {
+  transition: background-color 0.2s ease;
+}
+
+.row:hover {
+  background: #fafcff;
+}
+
+.cell {
+  padding: 16px;
+  vertical-align: middle;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+
+.row:last-child .cell {
+  border-bottom: none;
+}
+
+.customerCell {
+  min-width: 220px;
+}
+
+.name {
+  display: inline-block;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.name:hover {
+  color: var(--primary);
+}
+
+.company {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.email {
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
+  border-radius: 999px;
+}
+
+.statusActive {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.statusLead {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.statusInactive {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+.plan {
+  color: var(--text);
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.mrr {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.created {
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.state {
+  padding: 24px;
+  color: var(--text-secondary);
+}
