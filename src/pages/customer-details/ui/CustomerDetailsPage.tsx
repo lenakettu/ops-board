@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
 
+import { CustomerStatusBadge } from '@/entities/customer';
 import { getCustomerById } from '@/entities/customer/api/customersApi';
+
 import styles from './CustomerDetailsPage.module.css';
 
 export function CustomerDetailsPage() {
@@ -39,7 +41,7 @@ export function CustomerDetailsPage() {
 
           <div className={styles.row}>
             <dt>Status</dt>
-            <dd>{data.status}</dd>
+            <dd><CustomerStatusBadge status={data.status}/></dd>
           </div>
 
           <div className={styles.row}>

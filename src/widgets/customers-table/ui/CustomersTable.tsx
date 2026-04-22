@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 
+import { CustomerStatusBadge } from '@/entities/customer';
 import type { Customer } from '@/entities/customer/model/types';
 
 import styles from './CustomersTable.module.css';
@@ -9,18 +10,6 @@ export interface CustomersTableProps {
 
   isLoading: boolean;
   isError: boolean;
-}
-
-function getStatusClassName(status: 'active' | 'inactive' | 'lead'): string {
-  if (status === 'active') {
-    return `${styles.status} ${styles.statusActive}`;
-  }
-
-  if (status === 'inactive') {
-    return `${styles.status} ${styles.statusInactive}`;
-  }
-
-  return `${styles.status} ${styles.statusLead}`;
 }
 
 export function CustomersTable({ items, isLoading, isError }: CustomersTableProps) {
@@ -65,7 +54,7 @@ export function CustomersTable({ items, isLoading, isError }: CustomersTableProp
               </td>
 
               <td className={styles.cell}>
-                <span className={getStatusClassName(customer.status)}>{customer.status}</span>
+                <CustomerStatusBadge status={customer.status} />
               </td>
 
               <td className={styles.cell}>
