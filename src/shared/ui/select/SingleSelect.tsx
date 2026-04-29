@@ -3,6 +3,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './SingleSelect.module.css';
 import type { SingleSelectProps } from './types';
 
+const SELECT_OPEN_EVENT = 'opsboard-single-select-open';
+
 export function SingleSelect<T extends string>({
   options,
   value,
@@ -15,6 +17,16 @@ export function SingleSelect<T extends string>({
   const selectedLabel = useMemo(() => {
     return options.find((option) => option.value === value)?.label ?? placeholder;
   }, [options, placeholder, value]);
+
+  function handleToggleDropdown() {
+    if (!isOpen) {
+      window.dispatchEvent(new Event(SELECT_OPEN_EVENT));
+      setIsOpen(true);
+      return;
+    }
+
+    setIsOpen(false);
+  }
 
   function handleOptionSelect(optionValue: T) {
     onChange(optionValue);
@@ -38,12 +50,18 @@ export function SingleSelect<T extends string>({
       }
     }
 
+    function handleAnotherSelectOpen() {
+      setIsOpen(false);
+    }
+
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleEscape);
+    window.addEventListener(SELECT_OPEN_EVENT, handleAnotherSelectOpen);
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscape);
+      window.removeEventListener(SELECT_OPEN_EVENT, handleAnotherSelectOpen);
     };
   }, []);
 
@@ -52,7 +70,7 @@ export function SingleSelect<T extends string>({
       <button
         type="button"
         className={styles.trigger}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={handleToggleDropdown}
         aria-expanded={isOpen}
       >
         <span className={styles.value}>{selectedLabel}</span>
