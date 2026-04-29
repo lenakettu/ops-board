@@ -6,11 +6,11 @@ import type { SingleSelectProps } from './types';
 const SELECT_OPEN_EVENT = 'opsboard-single-select-open';
 
 export function SingleSelect<T extends string>({
-                                                 options,
-                                                 value,
-                                                 onChange,
-                                                 placeholder = 'Select...',
-                                               }: SingleSelectProps<T>) {
+  options,
+  value,
+  onChange,
+  placeholder = 'Select...',
+}: SingleSelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
 
