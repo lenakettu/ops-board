@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
+
+import { useDropdownDismiss } from '@/shared/hooks/useDropdownDismiss.ts';
 
 import styles from './SingleSelect.module.css';
 import type { SingleSelectProps } from './types';
@@ -33,37 +35,16 @@ export function SingleSelect<T extends string>({
     setIsOpen(false);
   }
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (!(event.target instanceof Node)) {
-        return;
-      }
-
-      if (rootRef.current && !rootRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    }
-
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        setIsOpen(false);
-      }
-    }
-
-    function handleAnotherSelectOpen() {
-      setIsOpen(false);
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEscape);
-    window.addEventListener(SELECT_OPEN_EVENT, handleAnotherSelectOpen);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
-      window.removeEventListener(SELECT_OPEN_EVENT, handleAnotherSelectOpen);
-    };
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
   }, []);
+
+  useDropdownDismiss({
+    rootRef,
+    isOpen,
+    onClose: handleClose,
+    closeOnOpenEventName: SELECT_OPEN_EVENT,
+  });
 
   return (
     <div className={styles.root} ref={rootRef}>
