@@ -2,11 +2,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 
 import { updateCustomer } from '@/entities/customer/api/customersApi';
+import { customerPlanOptions, customerStatusOptions } from '@/entities/customer/model/constants';
+import type { Customer } from '@/entities/customer/model/types';
 import {
-  customerPlanOptions,
-  customerStatusOptions,
-} from '@/entities/customer/model/constants';
-import type { Customer, UpdateCustomerInput } from '@/entities/customer/model/types';
+  customerFormValidationRules,
+  type CustomerFormValues,
+  getCustomerFormDefaultValues,
+  mapCustomerFormToUpdateInput,
+} from '@/features/customer-form/model/customerForm';
 
 import styles from './CustomerEditForm.module.css';
 
@@ -16,8 +19,6 @@ interface CustomerEditFormProps {
   onSuccess: () => void;
 }
 
-type CustomerEditFormValues = Omit<UpdateCustomerInput, 'id'>;
-
 export function CustomerEditForm({ customer, onCancel, onSuccess }: CustomerEditFormProps) {
   const queryClient = useQueryClient();
 
@@ -25,15 +26,8 @@ export function CustomerEditForm({ customer, onCancel, onSuccess }: CustomerEdit
     register,
     handleSubmit,
     formState: { errors, isDirty },
-  } = useForm<CustomerEditFormValues>({
-    defaultValues: {
-      name: customer.name,
-      email: customer.email,
-      company: customer.company,
-      status: customer.status,
-      plan: customer.plan,
-      mrr: customer.mrr,
-    },
+  } = useForm<CustomerFormValues>({
+    defaultValues: getCustomerFormDefaultValues(customer),
   });
 
   const mutation = useMutation({
@@ -45,12 +39,8 @@ export function CustomerEditForm({ customer, onCancel, onSuccess }: CustomerEdit
     },
   });
 
-  function onSubmit(values: CustomerEditFormValues) {
-    mutation.mutate({
-      id: customer.id,
-      ...values,
-      mrr: Number(values.mrr),
-    });
+  function onSubmit(values: CustomerFormValues) {
+    mutation.mutate(mapCustomerFormToUpdateInput(customer.id, values));
   }
 
   return (
@@ -70,7 +60,7 @@ export function CustomerEditForm({ customer, onCancel, onSuccess }: CustomerEdit
           <div>
             <input
               className={styles.input}
-              {...register('name', { required: 'Name is required' })}
+              {...register('name', customerFormValidationRules.name)}
             />
             {errors.name ? <p className={styles.error}>{errors.name.message}</p> : null}
           </div>
@@ -81,13 +71,7 @@ export function CustomerEditForm({ customer, onCancel, onSuccess }: CustomerEdit
           <div>
             <input
               className={styles.input}
-              {...register('email', {
-                required: 'Email is required',
-                pattern: {
-                  value: /^\S+@\S+\.\S+$/,
-                  message: 'Enter a valid email',
-                },
-              })}
+              {...register('email', customerFormValidationRules.email)}
             />
             {errors.email ? <p className={styles.error}>{errors.email.message}</p> : null}
           </div>
@@ -98,7 +82,7 @@ export function CustomerEditForm({ customer, onCancel, onSuccess }: CustomerEdit
           <div>
             <input
               className={styles.input}
-              {...register('company', { required: 'Company is required' })}
+              {...register('company', customerFormValidationRules.company)}
             />
             {errors.company ? <p className={styles.error}>{errors.company.message}</p> : null}
           </div>
@@ -133,13 +117,7 @@ export function CustomerEditForm({ customer, onCancel, onSuccess }: CustomerEdit
               className={styles.input}
               type="number"
               min="0"
-              {...register('mrr', {
-                valueAsNumber: true,
-                min: {
-                  value: 0,
-                  message: 'MRR cannot be negative',
-                },
-              })}
+              {...register('mrr', customerFormValidationRules.mrr)}
             />
             {errors.mrr ? <p className={styles.error}>{errors.mrr.message}</p> : null}
           </div>
