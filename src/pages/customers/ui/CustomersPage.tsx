@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { getCustomers } from '@/entities/customer/api/customersApi';
+import { CreateCustomerModal } from '@/features/customer-create/ui/CreateCustomerModal.tsx';
 import { CustomerFilters } from '@/features/customer-filters/ui/CustomerFilters';
 import { CustomersPagination } from '@/widgets/customers-pagination/ui/CustomersPagination';
 import { CustomersTable } from '@/widgets/customers-table/ui/CustomersTable';
@@ -18,6 +19,7 @@ import styles from './CustomersPage.module.css';
 
 export function CustomersPage() {
   const [filters, setFilters] = useState(defaultCustomersFilters);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['customers', filters],
@@ -33,21 +35,27 @@ export function CustomersPage() {
         </div>
       </div>
 
-      <CustomerFilters
-        filters={filters}
-        onSearchChange={(value) => {
-          setFilters((prev) => updateSearch(prev, value));
-        }}
-        onStatusChange={(value) => {
-          setFilters((prev) => updateStatus(prev, value));
-        }}
-        onPlanChange={(value) => {
-          setFilters((prev) => updatePlan(prev, value));
-        }}
-        onReset={() => {
-          setFilters(resetFilters());
-        }}
-      />
+      <div className={styles.filters}>
+        <CustomerFilters
+          filters={filters}
+          onSearchChange={(value) => {
+            setFilters((prev) => updateSearch(prev, value));
+          }}
+          onStatusChange={(value) => {
+            setFilters((prev) => updateStatus(prev, value));
+          }}
+          onPlanChange={(value) => {
+            setFilters((prev) => updatePlan(prev, value));
+          }}
+          onReset={() => {
+            setFilters(resetFilters());
+          }}
+        />
+
+        <button onClick={() => setIsCreateOpen(true)}>Add customer</button>
+      </div>
+
+      {isCreateOpen && <CreateCustomerModal onClose={() => setIsCreateOpen(false)} />}
 
       <CustomersTable items={data?.items ?? []} isLoading={isLoading} isError={isError} />
 

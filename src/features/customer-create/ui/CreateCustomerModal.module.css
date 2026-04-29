@@ -1,0 +1,98 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgb(15 23 42 / 0.45);
+}
+
+.modal {
+  width: min(100%, 620px);
+  max-height: min(720px, calc(100vh - 48px));
+  padding: 24px;
+  overflow: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.form {
+  display: grid;
+  gap: 24px;
+}
+
+.title {
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.description {
+  margin-top: 6px;
+  color: var(--text-secondary);
+}
+
+.formError {
+  padding: 10px 12px;
+  color: var(--danger);
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-sm);
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.primaryButton,
+.secondaryButton {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: var(--radius-sm);
+}
+
+.primaryButton {
+  color: #fff;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.primaryButton:hover {
+  background: var(--primary-hover);
+}
+
+.primaryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.secondaryButton {
+  color: var(--text);
+  background: var(--surface-secondary);
+  border: 1px solid var(--border);
+}
+
+.secondaryButton:hover {
+  background: var(--surface);
+}
+
+@media (width <= 640px) {
+  .overlay {
+    padding: 16px;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+  }
+}

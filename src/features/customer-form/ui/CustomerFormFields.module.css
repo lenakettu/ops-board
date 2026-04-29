@@ -1,0 +1,40 @@
+.details {
+  display: grid;
+  gap: 12px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+@media (width <= 640px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+.label {
+  color: var(--text-secondary);
+}
+
+.input {
+  width: 100%;
+  max-width: 420px;
+  min-height: 40px;
+  padding: 0 12px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.error {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--danger);
+}

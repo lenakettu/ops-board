@@ -22,10 +22,7 @@ export function updateSearch(prev: CustomersFilters, search: string): CustomersF
   };
 }
 
-export function updateStatus(
-  prev: CustomersFilters,
-  status: CustomerStatus[],
-): CustomersFilters {
+export function updateStatus(prev: CustomersFilters, status: CustomerStatus[]): CustomersFilters {
   return {
     ...prev,
     status,
