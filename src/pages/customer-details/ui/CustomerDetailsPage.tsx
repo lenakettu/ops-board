@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import { CustomerStatusBadge } from '@/entities/customer';
 import { getCustomerById } from '@/entities/customer/api/customersApi';
+import { CustomerEditForm } from '@/features/customer-form/ui/CustomerEditForm';
 
 import styles from './CustomerDetailsPage.module.css';
 
@@ -32,35 +33,59 @@ export function CustomerDetailsPage() {
       </Link>
 
       <div className={styles.card}>
-        <h2 className={styles.title}>{data.name}</h2>
-        <p className={styles.company}>{data.company}</p>
+        {isEditing ? (
+          <CustomerEditForm
+            customer={data}
+            onCancel={() => setIsEditing(false)}
+            onSuccess={() => setIsEditing(false)}
+          />
+        ) : (
+          <>
+            <div className={styles.cardHeader}>
+              <div>
+                <h2 className={styles.title}>{data.name}</h2>
+                <p className={styles.company}>{data.company}</p>
+              </div>
 
-        <dl className={styles.details}>
-          <div className={styles.row}>
-            <dt>Email</dt>
-            <dd>{data.email}</dd>
-          </div>
+              <button
+                type="button"
+                className={styles.editButton}
+                onClick={() => setIsEditing(true)}
+              >
+                Edit
+              </button>
+            </div>
 
-          <div className={styles.row}>
-            <dt>Status</dt>
-            <dd><CustomerStatusBadge status={data.status}/></dd>
-          </div>
+            <dl className={styles.details}>
+              <div className={styles.row}>
+                <dt>Email</dt>
+                <dd>{data.email}</dd>
+              </div>
 
-          <div className={styles.row}>
-            <dt>Plan</dt>
-            <dd>{data.plan}</dd>
-          </div>
+              <div className={styles.row}>
+                <dt>Status</dt>
+                <dd>
+                  <CustomerStatusBadge status={data.status} />
+                </dd>
+              </div>
 
-          <div className={styles.row}>
-            <dt>MRR</dt>
-            <dd>${data.mrr}</dd>
-          </div>
+              <div className={styles.row}>
+                <dt>Plan</dt>
+                <dd>{data.plan}</dd>
+              </div>
 
-          <div className={styles.row}>
-            <dt>Created</dt>
-            <dd>{new Date(data.createdAt).toLocaleDateString()}</dd>
-          </div>
-        </dl>
+              <div className={styles.row}>
+                <dt>MRR</dt>
+                <dd>${data.mrr}</dd>
+              </div>
+
+              <div className={styles.row}>
+                <dt>Created</dt>
+                <dd>{new Date(data.createdAt).toLocaleDateString()}</dd>
+              </div>
+            </dl>
+          </>
+        )}
       </div>
     </section>
   );

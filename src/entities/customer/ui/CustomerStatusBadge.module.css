@@ -1,26 +1,26 @@
 .status {
-    display: inline-flex;
-    align-items: center;
-    min-height: 28px;
-    padding: 0 10px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: capitalize;
-    white-space: nowrap;
-    border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
+  border-radius: 999px;
 }
 
 .statusActive {
-    color: #166534;
-    background: #dcfce7;
+  color: #166534;
+  background: #dcfce7;
 }
 
 .statusLead {
-    color: #92400e;
-    background: #fef3c7;
+  color: #92400e;
+  background: #fef3c7;
 }
 
 .statusInactive {
-    color: #991b1b;
-    background: #fee2e2;
+  color: #991b1b;
+  background: #fee2e2;
 }
