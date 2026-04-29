@@ -2,6 +2,8 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { CustomerDetailsPage } from '@/pages/customer-details';
 import { CustomersPage } from '@/pages/customers';
+import { ErrorPage } from '@/pages/error';
+import { NotFoundPage } from '@/pages/not-found';
 import { OverviewPage } from '@/pages/overview';
 import { AppLayout } from '@/widgets/app-layout';
 
@@ -9,6 +11,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <AppLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -21,6 +24,10 @@ export const router = createBrowserRouter([
       {
         path: 'customers/:customerId',
         element: <CustomerDetailsPage />,
+      },
+      {
+        path: '*',
+        element: <NotFoundPage />,
       },
     ],
   },
