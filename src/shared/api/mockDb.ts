@@ -1,5 +1,7 @@
 import type { Customer } from '@/entities/customer/model/types';
 
+const STORAGE_KEY = 'opsboard-customers';
+
 const initialCustomers: Customer[] = [
   {
     id: 'cus_001',
@@ -123,7 +125,26 @@ const initialCustomers: Customer[] = [
   },
 ];
 
-let customersDb: Customer[] = [...initialCustomers];
+function loadCustomers(): Customer[] {
+  const raw = localStorage.getItem(STORAGE_KEY);
+
+  if (!raw) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialCustomers));
+    return [...initialCustomers];
+  }
+
+  try {
+    return JSON.parse(raw) as Customer[];
+  } catch {
+    return [...initialCustomers];
+  }
+}
+
+function saveCustomers(customers: Customer[]): void {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(customers));
+}
+
+let customersDb: Customer[] = loadCustomers();
 
 export function getCustomersDb(): Customer[] {
   return [...customersDb];
@@ -135,10 +156,13 @@ export function getCustomerFromDb(id: string): Customer | undefined {
 
 export function insertCustomerToDb(customer: Customer): void {
   customersDb = [customer, ...customersDb];
+  saveCustomers(customersDb);
 }
 
 export function updateCustomerInDb(updatedCustomer: Customer): void {
   customersDb = customersDb.map((customer) =>
     customer.id === updatedCustomer.id ? updatedCustomer : customer,
   );
+
+  saveCustomers(customersDb);
 }
