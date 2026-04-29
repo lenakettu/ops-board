@@ -10,6 +10,7 @@
   width: 100%;
   min-width: 960px;
   font-size: 14px;
+  table-layout: fixed;
   border-spacing: 0;
   border-collapse: separate;
 }
@@ -20,6 +21,7 @@
 
 .headCell {
   padding: 14px 16px;
+  overflow: hidden;
   font-size: 12px;
   font-weight: 600;
   color: var(--text-secondary);
@@ -28,6 +30,30 @@
   letter-spacing: 0.02em;
   white-space: nowrap;
   border-bottom: 1px solid var(--border);
+}
+
+.headCell:nth-child(1) {
+  width: 28%;
+}
+
+.headCell:nth-child(2) {
+  width: 24%;
+}
+
+.headCell:nth-child(3) {
+  width: 12%;
+}
+
+.headCell:nth-child(4) {
+  width: 12%;
+}
+
+.headCell:nth-child(5) {
+  width: 10%;
+}
+
+.headCell:nth-child(6) {
+  width: 14%;
 }
 
 .row {
@@ -40,6 +66,7 @@
 
 .cell {
   padding: 16px;
+  overflow: hidden;
   vertical-align: middle;
   color: var(--text);
   border-bottom: 1px solid var(--border);
@@ -54,10 +81,13 @@
 }
 
 .name {
-  display: inline-block;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-weight: 600;
   line-height: 1.4;
   color: var(--text);
+  white-space: nowrap;
 }
 
 .name:hover {
@@ -66,17 +96,24 @@
 
 .company {
   margin-top: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 13px;
   line-height: 1.4;
   color: var(--text-secondary);
+  white-space: nowrap;
 }
 
 .email {
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--text-secondary);
   white-space: nowrap;
 }
 
 .plan {
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--text);
   text-transform: capitalize;
   white-space: nowrap;

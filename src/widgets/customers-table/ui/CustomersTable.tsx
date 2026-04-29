@@ -1,79 +1,42 @@
-import { Link } from 'react-router-dom';
-
-import { CustomerStatusBadge } from '@/entities/customer';
 import type { Customer } from '@/entities/customer/model/types';
+import { CustomersTableHead } from '@/widgets/customers-table/ui/CustomersTableHead.tsx';
+import { CustomersTableRow } from '@/widgets/customers-table/ui/CustomersTableRow.tsx';
+import { CustomersTableSkeleton } from '@/widgets/customers-table/ui/CustomersTableSkeleton.tsx';
+import { CustomersTableState } from '@/widgets/customers-table/ui/CustomersTableState.tsx';
 
 import styles from './CustomersTable.module.css';
 
-export interface CustomersTableProps {
-  items: Customer[];
+export type CustomersTableState = 'loading' | 'error' | 'empty' | 'success';
 
-  isLoading: boolean;
-  isError: boolean;
+interface CustomersTableProps {
+  items: Customer[];
+  state: CustomersTableState;
 }
 
-export function CustomersTable({ items, isLoading, isError }: CustomersTableProps) {
-  if (isLoading) {
-    return <div className={styles.state}>Loading customers...</div>;
-  }
-
-  if (isError) {
-    return <div className={styles.state}>Failed to load customers.</div>;
-  }
-
-  if (items.length === 0) {
-    return <div className={styles.state}>No customers found.</div>;
-  }
-
+export function CustomersTable({ items, state }: CustomersTableProps) {
   return (
     <div className={styles.wrapper}>
       <table className={styles.table}>
-        <thead>
-          <tr className={styles.headRow}>
-            <th className={styles.headCell}>Customer</th>
-            <th className={styles.headCell}>Email</th>
-            <th className={styles.headCell}>Status</th>
-            <th className={styles.headCell}>Plan</th>
-            <th className={styles.headCell}>MRR</th>
-            <th className={styles.headCell}>Created</th>
-          </tr>
-        </thead>
+        <CustomersTableHead />
 
-        <tbody>
-          {items.map((customer) => (
-            <tr key={customer.id} className={styles.row}>
-              <td className={`${styles.cell} ${styles.customerCell}`}>
-                <Link to={`/customers/${customer.id}`} className={styles.name}>
-                  {customer.name}
-                </Link>
-                <div className={styles.company}>{customer.company}</div>
-              </td>
-
-              <td className={styles.cell}>
-                <span className={styles.email}>{customer.email}</span>
-              </td>
-
-              <td className={styles.cell}>
-                <CustomerStatusBadge status={customer.status} />
-              </td>
-
-              <td className={styles.cell}>
-                <span className={styles.plan}>{customer.plan}</span>
-              </td>
-
-              <td className={styles.cell}>
-                <span className={styles.mrr}>${customer.mrr.toLocaleString()}</span>
-              </td>
-
-              <td className={styles.cell}>
-                <span className={styles.created}>
-                  {new Date(customer.createdAt).toLocaleDateString()}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        <tbody>{renderCustomersTableBody(state, items)}</tbody>
       </table>
     </div>
   );
+}
+
+function renderCustomersTableBody(state: CustomersTableState, items: Customer[]) {
+  switch (state) {
+    case 'loading':
+      return <CustomersTableSkeleton />;
+
+    case 'error':
+      return <CustomersTableState message="Failed to load customers." />;
+
+    case 'empty':
+      return <CustomersTableState message="No customers found." />;
+
+    case 'success':
+      return items.map((customer) => <CustomersTableRow key={customer.id} customer={customer} />);
+  }
 }

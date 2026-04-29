@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { getCustomers } from '@/entities/customer/api/customersApi';
 import { CreateCustomerModal } from '@/features/customer-create/ui/CreateCustomerModal.tsx';
@@ -25,6 +25,24 @@ export function CustomersPage() {
     queryKey: ['customers', filters],
     queryFn: () => getCustomers(filters),
   });
+
+  const customers = data?.items ?? [];
+
+  const tableState = useMemo(() => {
+    if (isLoading) {
+      return 'loading';
+    }
+
+    if (isError) {
+      return 'error';
+    }
+
+    if (customers.length === 0) {
+      return 'empty';
+    }
+
+    return 'success';
+  }, [isLoading, isError, customers.length]);
 
   return (
     <section className={styles.page}>
@@ -52,14 +70,16 @@ export function CustomersPage() {
           }}
         />
 
-        <button onClick={() => setIsCreateOpen(true)}>Add customer</button>
+        <button type="button" onClick={() => setIsCreateOpen(true)}>
+          Add customer
+        </button>
       </div>
 
       {isCreateOpen && <CreateCustomerModal onClose={() => setIsCreateOpen(false)} />}
 
-      <CustomersTable items={data?.items ?? []} isLoading={isLoading} isError={isError} />
+      <CustomersTable items={customers} state={tableState} />
 
-      {data ? (
+      {data && tableState === 'success' ? (
         <CustomersPagination
           page={data.page}
           totalPages={data.totalPages}
