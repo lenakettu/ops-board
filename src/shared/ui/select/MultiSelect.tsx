@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
+
+import { useDropdownDismiss } from '@/shared/hooks/useDropdownDismiss';
 
 import styles from './MultiSelect.module.css';
 import type { MultiSelectProps } from './types';
@@ -33,31 +35,15 @@ export function MultiSelect<T extends string>({
     onChange([]);
   }
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (!(event.target instanceof Node)) {
-        return;
-      }
-
-      if (rootRef.current && !rootRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    }
-
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        setIsOpen(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEscape);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
-    };
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
   }, []);
+
+  useDropdownDismiss({
+    rootRef,
+    isOpen,
+    onClose: handleClose,
+  });
 
   const triggerLabel =
     selectedLabels.length === 0
