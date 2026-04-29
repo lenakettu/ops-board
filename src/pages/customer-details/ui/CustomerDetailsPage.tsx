@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import { CustomerStatusBadge } from '@/entities/customer';
 import { getCustomerById } from '@/entities/customer/api/customersApi';
-import { CustomerEditForm } from '@/features/customer-form/ui/CustomerEditForm';
+import { CustomerEditForm } from '@/features/customer-edit';
 
 import styles from './CustomerDetailsPage.module.css';
 

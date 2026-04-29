@@ -24,3 +24,8 @@
   margin-top: 6px;
   color: var(--text-secondary);
 }
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+}

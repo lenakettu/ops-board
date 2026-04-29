@@ -6,4 +6,4 @@ export {
   mapCustomerFormToCreateInput,
   mapCustomerFormToUpdateInput,
 } from './model/customerForm';
-export { CustomerEditForm } from './ui/CustomerEditForm';
+export { CustomerFormFields } from './ui/CustomerFormFields';

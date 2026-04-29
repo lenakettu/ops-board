@@ -9,3 +9,10 @@ export interface MultiSelectProps<T extends string> {
   onChange: (value: T[]) => void;
   placeholder: string;
 }
+
+export interface SingleSelectProps<T extends string> {
+  options: SelectOption<T>[];
+  value: T;
+  onChange: (value: T) => void;
+  placeholder?: string;
+}
