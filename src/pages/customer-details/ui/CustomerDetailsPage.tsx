@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { CustomerStatusBadge } from '@/entities/customer';
@@ -7,6 +8,7 @@ import { getCustomerById } from '@/entities/customer/api/customersApi';
 import styles from './CustomerDetailsPage.module.css';
 
 export function CustomerDetailsPage() {
+  const [isEditing, setIsEditing] = useState(false);
   const { customerId } = useParams<{ customerId: string }>();
 
   const { data, isLoading, isError } = useQuery({

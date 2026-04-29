@@ -9,12 +9,25 @@
 }
 
 .card {
-  max-width: 720px;
+  max-width: 820px;
   padding: 24px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
+}
+
+.cardHeader {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+@media (width <= 640px) {
+  .cardHeader {
+    flex-direction: column;
+  }
 }
 
 .title {
@@ -24,6 +37,19 @@
 .company {
   margin-top: 6px;
   color: var(--text-secondary);
+}
+
+.editButton {
+  min-height: 40px;
+  padding: 0 14px;
+  color: var(--text);
+  background: var(--surface-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.editButton:hover {
+  background: var(--surface);
 }
 
 .details {
@@ -40,17 +66,17 @@
   border-top: 1px solid var(--border);
 }
 
+@media (width <= 640px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+
 .row dt {
   color: var(--text-secondary);
 }
 
 .message {
   color: var(--text-secondary);
-}
-
-@media (width <= 640px) {
-  .row {
-    grid-template-columns: 1fr;
-    gap: 4px;
-  }
 }
