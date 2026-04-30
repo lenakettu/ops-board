@@ -9,6 +9,7 @@ import {
   emptyCustomerFormValues,
   mapCustomerFormToCreateInput,
 } from '@/features/customer-form';
+import { useToast } from '@/shared/ui/toast';
 
 import styles from './CreateCustomerModal.module.css';
 
@@ -18,6 +19,8 @@ interface CreateCustomerModalProps {
 
 export function CreateCustomerModal({ onClose }: CreateCustomerModalProps) {
   const queryClient = useQueryClient();
+
+  const { showToast } = useToast();
 
   const {
     register,
@@ -33,7 +36,12 @@ export function CreateCustomerModal({ onClose }: CreateCustomerModalProps) {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['customers'] });
       void queryClient.invalidateQueries({ queryKey: ['overview-stats'] });
+
+      showToast('Customer created successfully');
       onClose();
+    },
+    onError: () => {
+      showToast('Failed to create customer', 'error');
     },
   });
 
