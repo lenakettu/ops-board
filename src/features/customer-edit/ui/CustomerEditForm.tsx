@@ -9,6 +9,7 @@ import {
   getCustomerFormDefaultValues,
   mapCustomerFormToUpdateInput,
 } from '@/features/customer-form/model/customerForm';
+import { useToast } from '@/shared/ui/toast';
 
 import styles from './CustomerEditForm.module.css';
 
@@ -20,6 +21,8 @@ interface CustomerEditFormProps {
 
 export function CustomerEditForm({ customer, onCancel, onSuccess }: CustomerEditFormProps) {
   const queryClient = useQueryClient();
+
+  const { showToast } = useToast();
 
   const {
     register,
@@ -35,7 +38,13 @@ export function CustomerEditForm({ customer, onCancel, onSuccess }: CustomerEdit
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['customer', customer.id] });
       void queryClient.invalidateQueries({ queryKey: ['customers'] });
+      void queryClient.invalidateQueries({ queryKey: ['overview-stats'] });
+
+      showToast('Customer updated successfully');
       onSuccess();
+    },
+    onError: () => {
+      showToast('Failed to update customer', 'error');
     },
   });
 
