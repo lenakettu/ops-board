@@ -20,7 +20,7 @@ interface CreateCustomerModalProps {
 export function CreateCustomerModal({ onClose }: CreateCustomerModalProps) {
   const queryClient = useQueryClient();
 
-  const { showToast } = useToast();
+  const toast = useToast();
 
   const {
     register,
@@ -37,11 +37,11 @@ export function CreateCustomerModal({ onClose }: CreateCustomerModalProps) {
       void queryClient.invalidateQueries({ queryKey: ['customers'] });
       void queryClient.invalidateQueries({ queryKey: ['overview-stats'] });
 
-      showToast('Customer created successfully');
+      toast.success('Customer created successfully');
       onClose();
     },
     onError: () => {
-      showToast('Failed to create customer', 'error');
+      toast.error('Failed to create customer');
     },
   });
 

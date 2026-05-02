@@ -1,60 +1,67 @@
-import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
+import { ToastContext } from './ToastContext';
 import styles from './ToastProvider.module.css';
-
-type ToastVariant = 'success' | 'error';
-
-interface Toast {
-  id: string;
-  message: string;
-  variant: ToastVariant;
-}
-
-interface ToastContextValue {
-  showToast: (message: string, variant?: ToastVariant) => void;
-}
-
-const ToastContext = createContext<ToastContextValue | null>(null);
+import type { Toast, ToastVariant } from './types';
 
 interface ToastProviderProps {
   children: ReactNode;
 }
 
+const TOAST_DURATION = 3000;
+
+function createToast(message: string, variant: ToastVariant): Toast {
+  return {
+    id: crypto.randomUUID(),
+    message,
+    variant,
+  };
+}
+
 export function ToastProvider({ children }: ToastProviderProps) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const removeToast = useCallback((id: string) => {
+  const close = useCallback((id: string) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   }, []);
 
-  const showToast = useCallback(
-    (message: string, variant: ToastVariant = 'success') => {
-      const id = crypto.randomUUID();
+  const show = useCallback(
+    (message: string, variant: ToastVariant) => {
+      const toast = createToast(message, variant);
 
-      setToasts((prev) => [...prev, { id, message, variant }]);
+      setToasts((prev) => [...prev, toast]);
 
       window.setTimeout(() => {
-        removeToast(id);
-      }, 3500);
+        close(toast.id);
+      }, TOAST_DURATION);
     },
-    [removeToast],
+    [close],
   );
 
-  const value = useMemo(() => ({ showToast }), [showToast]);
+  const value = useMemo(
+    () => ({
+      success: (message: string) => show(message, 'success'),
+      error: (message: string) => show(message, 'error'),
+      info: (message: string) => show(message, 'info'),
+      close,
+    }),
+    [show, close],
+  );
 
   return (
     <ToastContext.Provider value={value}>
       {children}
 
-      <div className={styles.viewport} aria-live="polite">
+      <div className={styles.container}>
         {toasts.map((toast) => (
           <div key={toast.id} className={`${styles.toast} ${styles[toast.variant]}`}>
             <span>{toast.message}</span>
 
             <button
-              type="button"
               className={styles.closeButton}
-              onClick={() => removeToast(toast.id)}
+              type="button"
+              onClick={() => close(toast.id)}
               aria-label="Close notification"
             >
               ×
@@ -64,14 +71,4 @@ export function ToastProvider({ children }: ToastProviderProps) {
       </div>
     </ToastContext.Provider>
   );
-}
-
-export function useToast() {
-  const context = useContext(ToastContext);
-
-  if (!context) {
-    throw new Error('useToast must be used within ToastProvider');
-  }
-
-  return context;
 }

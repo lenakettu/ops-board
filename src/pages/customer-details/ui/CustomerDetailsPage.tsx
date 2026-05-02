@@ -28,8 +28,22 @@ export function CustomerDetailsPage() {
     return <CustomerDetailsSkeleton />;
   }
 
-  if (isError || !customer) {
-    return <CustomerDetailsMessage message="Customer not found." />;
+  if (isError) {
+    return (
+      <CustomerDetailsMessage
+        title="Failed to load customer"
+        description="Please try again later."
+      />
+    );
+  }
+
+  if (!customer) {
+    return (
+      <CustomerDetailsMessage
+        title="Customer not found"
+        description="This customer does not exist or may have been removed."
+      />
+    );
   }
 
   return (

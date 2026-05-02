@@ -2,11 +2,20 @@ import styles from '@/widgets/customers-table/ui/CustomersTable.module.css';
 
 const COLUMNS_COUNT = 6;
 
-export function CustomersTableState({ message }: { message: string }) {
+interface CustomersTableStateProps {
+  title: string;
+  description?: string;
+}
+
+export function CustomersTableState({ title, description }: CustomersTableStateProps) {
   return (
     <tr>
       <td colSpan={COLUMNS_COUNT} className={styles.state}>
-        {message}
+        <div className={styles.stateContent}>
+          <p className={styles.stateTitle}>{title}</p>
+
+          {description ? <p className={styles.stateDescription}>{description}</p> : null}
+        </div>
       </td>
     </tr>
   );
