@@ -130,6 +130,21 @@
 }
 
 .state {
-  padding: 24px;
+  padding: 32px 16px;
+  text-align: center;
+}
+
+.stateContent {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+}
+
+.stateTitle {
+  font-size: 16px;
+  color: var(--text);
+}
+
+.stateDescription {
   color: var(--text-secondary);
 }

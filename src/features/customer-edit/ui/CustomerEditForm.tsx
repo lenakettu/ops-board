@@ -22,7 +22,7 @@ interface CustomerEditFormProps {
 export function CustomerEditForm({ customer, onCancel, onSuccess }: CustomerEditFormProps) {
   const queryClient = useQueryClient();
 
-  const { showToast } = useToast();
+  const toast = useToast();
 
   const {
     register,
@@ -40,11 +40,11 @@ export function CustomerEditForm({ customer, onCancel, onSuccess }: CustomerEdit
       void queryClient.invalidateQueries({ queryKey: ['customers'] });
       void queryClient.invalidateQueries({ queryKey: ['overview-stats'] });
 
-      showToast('Customer updated successfully');
+      toast.success('Customer updated successfully');
       onSuccess();
     },
     onError: () => {
-      showToast('Failed to update customer', 'error');
+      toast.error('Failed to update customer');
     },
   });
 

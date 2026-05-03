@@ -123,25 +123,58 @@ const initialCustomers: Customer[] = [
     mrr: 980,
     createdAt: '2025-11-25T17:00:00.000Z',
   },
+
+  ...Array.from({ length: 30 }).map((_, index) => ({
+    id: `cus_${100 + index}`,
+    name: `Customer ${index + 1}`,
+    email: `customer${index + 1}@example.com`,
+    company: `Company ${index + 1}`,
+    status: ['active', 'inactive', 'lead'][index % 3] as Customer['status'],
+    plan: ['starter', 'growth', 'enterprise'][index % 3] as Customer['plan'],
+    mrr: index % 3 === 0 ? 0 : Math.floor(Math.random() * 5000),
+    createdAt: new Date(Date.now() - index * 86400000).toISOString(),
+  })),
 ];
+
+function isCustomerArray(value: unknown): value is Customer[] {
+  return (
+    Array.isArray(value) &&
+    value.every(
+      (item) =>
+        typeof item === 'object' &&
+        item !== null &&
+        'id' in item &&
+        'name' in item &&
+        'email' in item,
+    )
+  );
+}
+
+function saveCustomers(customers: Customer[]): void {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(customers));
+}
 
 function loadCustomers(): Customer[] {
   const raw = localStorage.getItem(STORAGE_KEY);
 
   if (!raw) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialCustomers));
+    saveCustomers(initialCustomers);
     return [...initialCustomers];
   }
 
   try {
-    return JSON.parse(raw) as Customer[];
+    const parsed: unknown = JSON.parse(raw);
+
+    if (!isCustomerArray(parsed) || parsed.length === 0) {
+      saveCustomers(initialCustomers);
+      return [...initialCustomers];
+    }
+
+    return parsed;
   } catch {
+    saveCustomers(initialCustomers);
     return [...initialCustomers];
   }
-}
-
-function saveCustomers(customers: Customer[]): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(customers));
 }
 
 let customersDb: Customer[] = loadCustomers();

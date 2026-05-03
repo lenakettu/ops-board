@@ -11,30 +11,49 @@ export type CustomersTableState = 'loading' | 'error' | 'empty' | 'success';
 interface CustomersTableProps {
   items: Customer[];
   state: CustomersTableState;
+  hasActiveFilters: boolean;
 }
 
-export function CustomersTable({ items, state }: CustomersTableProps) {
+export function CustomersTable({ items, state, hasActiveFilters }: CustomersTableProps) {
   return (
     <div className={styles.wrapper}>
       <table className={styles.table}>
         <CustomersTableHead />
 
-        <tbody>{renderCustomersTableBody(state, items)}</tbody>
+        <tbody>{renderCustomersTableBody(state, items, hasActiveFilters)}</tbody>
       </table>
     </div>
   );
 }
 
-function renderCustomersTableBody(state: CustomersTableState, items: Customer[]) {
+function renderCustomersTableBody(
+  state: CustomersTableState,
+  items: Customer[],
+  hasActiveFilters: boolean,
+) {
   switch (state) {
     case 'loading':
       return <CustomersTableSkeleton />;
 
     case 'error':
-      return <CustomersTableState message="Failed to load customers." />;
+      return (
+        <CustomersTableState
+          title="Failed to load customers"
+          description="Please try again later."
+        />
+      );
 
     case 'empty':
-      return <CustomersTableState message="No customers found." />;
+      return (
+        <CustomersTableState
+          title={hasActiveFilters ? 'No customers found' : 'No customers yet'}
+          description={
+            hasActiveFilters
+              ? 'Try adjusting your filters or search query.'
+              : 'Create your first customer to get started.'
+          }
+        />
+      );
 
     case 'success':
       return items.map((customer) => <CustomersTableRow key={customer.id} customer={customer} />);

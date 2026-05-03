@@ -26,6 +26,9 @@ export function CustomersPage() {
     queryFn: () => getCustomers(filters),
   });
 
+  const hasActiveFilters =
+    filters.search.trim().length > 0 || filters.status.length > 0 || filters.plan.length > 0;
+
   const customers = data?.items ?? [];
 
   const tableState = useMemo(() => {
@@ -77,7 +80,7 @@ export function CustomersPage() {
 
       {isCreateOpen && <CreateCustomerModal onClose={() => setIsCreateOpen(false)} />}
 
-      <CustomersTable items={customers} state={tableState} />
+      <CustomersTable items={customers} state={tableState} hasActiveFilters={hasActiveFilters} />
 
       {data && tableState === 'success' ? (
         <CustomersPagination
