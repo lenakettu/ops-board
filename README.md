@@ -1,5 +1,7 @@
 # OpsBoard
 
+## Work in progress. This project is currently under development and reflects my current approach to building data-driven frontend applications (React + TypeScript).
+
 Internal admin dashboard (CRM-like interface) built with React, TypeScript and Vite.
 
 This project focuses on building a production-like frontend architecture for data-driven applications, similar to internal tools used in real companies.
